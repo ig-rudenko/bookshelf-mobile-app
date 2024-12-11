@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import BookCard from "@/components/books/BookCard";
 import bookService from "@/services/books";
 import {Book} from "@/services/types/books";
 import {ThemedText} from "@/components/ThemedText";
 import {ThemedView} from "@/components/ThemedView";
+import {Linking} from "react-native";
 
 export default function BookList() {
     const [books, setBooks] = useState<Book[] | null>(null);
@@ -37,9 +38,13 @@ export default function BookList() {
                 <React.Fragment key={book.id}>
                     {BookCard(
                         book,
-                        () => {},
-                        () => {},
-                        () => {},
+                        (bookID: number) => {
+                            Linking.openURL(`https://it-bookshelf.ru/book/${bookID}`)
+                        },
+                        () => {
+                        },
+                        () => {
+                        },
                         false)
                     }
                 </React.Fragment>

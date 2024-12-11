@@ -1,7 +1,7 @@
-import {FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {Book} from "@/services/types/books";
-import React, {useState} from "react";
+import React from "react";
 import {formatBytes} from "@/services/formatter";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
@@ -37,7 +37,7 @@ export default function BookCard(book: Book, onBookClick: Function, onPublisherC
             {!isMobile && (
                 <ThemedView style={styles.bookAbout}>
                     <ThemedText style={styles.bookTitle}>
-                        <ThemedText onPress={() => onBookClick(book.id)}>{book.title}</ThemedText>
+                        <ThemedText type="title" onPress={() => onBookClick(book.id)}>{book.title}</ThemedText>
                     </ThemedText>
 
                     <ThemedView style={[styles.publisherInfo]}>
@@ -66,17 +66,16 @@ export default function BookCard(book: Book, onBookClick: Function, onPublisherC
                     </ThemedView>
 
                     <View style={styles.tagsContainer}>
-                        <FlatList
-                            data={book.tags}
-                            keyExtractor={(item) => item.name}
-                            renderItem={({item}) => (
-                                <TouchableOpacity onPress={() => onTagSelect(item.name)}>
-                                    <IconSymbol size={28} name="tag.fill" color="white" />
+                        {book.tags.map(item => (
+                            <TouchableOpacity key={item.id} onPress={() => onTagSelect(item.name)}>
+                                <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                                    <IconSymbol size={28} name="tag.fill" color="white"/>
                                     <ThemedText style={styles.tag}>{item.name}</ThemedText>
-                                </TouchableOpacity>
-                            )}
-                        />
+                                </View>
+                            </TouchableOpacity>
+                        ))}
                     </View>
+
                 </ThemedView>
             )}
 
@@ -114,12 +113,15 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     bookImage: {
-        width: 260,
-        height: 360,
+        minWidth: 200,
+        maxWidth: 360,
+        minHeight: 500,
+        maxHeight: 800,
         borderRadius: 5,
     },
     bookAbout: {
         padding: 10,
+        paddingVertical: 40,
     },
     bookTitle: {
         fontSize: 16,
@@ -156,6 +158,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     tagsContainer: {
+        display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
@@ -163,6 +166,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         width: "auto",
         padding: 5,
+        paddingEnd: 10,
         margin: 5,
     },
     mobileView: {
