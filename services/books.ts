@@ -11,8 +11,8 @@ class BooksService {
         if (perPage) urlParams += `&per-page=${perPage}`;
         if (filter?.urlParams) urlParams += `&${filter.urlParams}`;
 
-        if (this.lastUrlParams == urlParams) return null;
-        this.lastUrlParams = urlParams
+        // if (this.lastUrlParams == urlParams) return null;
+        // this.lastUrlParams = urlParams
         return await api.get("/books" + urlParams)
           .then(
               (value: AxiosResponse<PaginatedBookResult>) => value.data

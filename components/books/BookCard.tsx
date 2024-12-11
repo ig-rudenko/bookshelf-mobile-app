@@ -1,4 +1,4 @@
-import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View, Alert} from 'react-native';
 
 import {Book} from "@/services/types/books";
 import React from "react";
@@ -6,6 +6,22 @@ import {formatBytes} from "@/services/formatter";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 import {IconSymbol} from "@/components/ui/IconSymbol";
+import * as FileSystem from 'expo-file-system';
+
+
+const downloadBook = async (book: Book) => {
+    Alert.alert(`${FileSystem.documentDirectory}/${book.title}.pdf`);
+    try {
+        const downloadDest = `${FileSystem.documentDirectory}/${book.title}.pdf`;
+        const url = `https://it-bookshelf.ru/api/v1/books/${book.id}/download?as-file=true`;
+
+        const { uri } = await FileSystem.downloadAsync(url, downloadDest);
+
+        Alert.alert('Скачивание завершено', `Файл сохранён: ${uri}`);
+    } catch (error: any) {
+        Alert.alert('Ошибка', error?.message);
+    }
+};
 
 
 function getLanguagePairByLabel(label: string) {
